@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  PersonalDal:
+    image: nikhil.personallog.dal
+    ports:
+      - "5000:5000"
+    build:
+      context: ./nikhil.personallog.dal
+      dockerfile: Dockerfile
+
+  PersonalWeb:
+    image: nikhil.personallog.web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - EmailServer=172.2.0.18
+    ports:
+      - "8080:8080"
+    build:
+      context: ./nikhil.personallog.web
+      dockerfile: Dockerfile
+
+  proxy:
+    build:
+      context: ./Nikhil.PersonalLog.NGINX
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - PersonalWeb
